@@ -1,0 +1,96 @@
+//Last update 10/2/13
+
+#include <iostream>
+#include <map>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+string getInput(){
+	string userInput;
+	cout << "Enter an arrangement of letters" << endl;
+	cin >> userInput;
+	sort(userInput.begin(), userInput.end());
+	return userInput;
+}
+
+void findAnagram(map<string, vector<string> > stringMap, string userInput ){
+	map<string, vector<string> >::const_iterator it;
+
+	for (it=stringMap.begin(); it != stringMap.end();++it){
+		if(it->first==userInput){
+			cout << it->first << " - ";
+			vector<string> tempVec = (*it).second;	
+		
+			for(int i=0;i<tempVec.size(); i++){	
+				cout << tempVec[i] << ", ";
+			}
+			cout << endl;
+		}
+	}
+}
+
+string displayEverything(){
+	/*
+	for(map<string, vector<string> >::const_iterator  it=stringMap.begin(); it != stringMap.end();++it){
+		cout << it->first << " - ";
+		vector<string> tempVec = (*it).second;	
+		
+		for(int i=0;i<tempVec.size(); i++){	
+			cout << tempVec[i] << ", ";
+		}
+		cout << endl;
+	}*/
+}
+
+int main(){
+	map<string, vector<string> > stringMap;
+	map<string, vector<string> >::const_iterator it;
+
+	int largest = 0;
+	string largestword;
+	string line;
+	string lineOriginal;
+	string userInput;
+	vector<string> addVector;
+
+	ifstream myfile ("textplay.txt");
+
+	if (myfile.is_open() ){ //Opening file
+		while ( myfile.good() ){ 
+			//Getting line and putting contents into line variable
+			getline (myfile, line); 			
+			lineOriginal = line;
+			sort(line.begin(), line.end());
+
+			//Adding first element if none exist
+			if(stringMap.size()==0){
+				stringMap.insert(std::pair< string,vector<string> > (line,addVector));
+			}
+			else{ 
+				//No current key for this arrangement of letters
+				if(stringMap.find(line) == stringMap.end()){
+					addVector.push_back(lineOriginal);
+					stringMap.insert(std::pair< string,vector<string> > (line,addVector));
+					addVector.clear();	
+				}else{
+					stringMap[line].push_back(lineOriginal);
+				}
+			}
+		}
+		myfile.close(); 
+	}
+	else{
+		cout << "Unable to open file";
+		return 1;
+	}
+
+	userInput = getInput
+
+	//Outputs any matching key and its value
+
+	return 0;
+} 
