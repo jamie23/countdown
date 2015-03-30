@@ -9,15 +9,6 @@
 
 using namespace std;
 
-//returns a sorted string input
-string getInput(){
-	string userInput;
-	cout << "Enter an arrangement of letters" << endl;
-	cin >> userInput;
-	sort(userInput.begin(), userInput.end());
-	return userInput;
-}
-
 //Finds keys which match sorted input, outputs all values for this key 
 void findAnagram(map<string, vector<string> > stringMap, string userInput ){
 	map<string, vector<string> >::const_iterator it;
@@ -48,7 +39,7 @@ string displayEverything(){
 	}*/
 }
 
-//Write comments on this 
+//Think this gives every permutation of word
 void permute(string str, int d){
 	if(d==str.length()){
 		sort(str.begin(),str.end());
@@ -70,28 +61,33 @@ void permute(string str, int d){
 
 
 
-int main(){
+string rtnSortedInput(string userInput){
+	sort(userInput.begin(), userInput.end());
+	return userInput;
+}
+
+
+map<string, vector<string> > generateMap(){
 	map<string, vector<string> > stringMap;
-	map<string, vector<string> >::const_iterator it;
-	//vector<string>
-	string line;
-	string lineOriginal;
-	string userInput;
+	string line, lineOriginal = "";
 	vector<string> addVector;
 
 	ifstream myfile ("textplay.txt");
 
-	if (myfile.is_open() ){ //Opening file
+	if (myfile.is_open() ){ 
 		while ( myfile.good() ){ 
-			//Getting line and putting contents into line variable
+			
+			//putting contents of myfile into line variable
 			getline (myfile, line); 			
 			lineOriginal = line;
 			sort(line.begin(), line.end());
 
 			//Adding first element if none exist
 			if(stringMap.size()==0){
+				
 				//addVector is blank here, doesn't have first value added to it.
 				stringMap.insert(std::pair< string,vector<string> > (line,addVector));
+				
 			}
 			else{ 
 				//No current key for this arrangement of letters
@@ -101,24 +97,37 @@ int main(){
 				addVector.clear();	
 				}else{
 					stringMap[line].push_back(lineOriginal);
-			}
+				}
 			}
 		}
 		myfile.close(); 
 	}
 	else{
 		cout << "Unable to open file";
-		return 1;
 	}
+	return stringMap;
+}
 
-	userInput = getInput();
+int main(){
+	map<string, vector<string> > stringMap;
+	map<string, vector<string> >::const_iterator it;
+	string userInput;
+	string sortedInput;
 
-	permute(userInput, 0);
+	cout << "Enter an arrangement of letters" << endl;
+	cin >> userInput;
+	sortedInput = rtnSortedInput(userInput);
+
+	stringMap = generateMap();
+
+	//Finds every permutation of a word passed into it
+	permute(sortedInput, 0);
 	
 	map<string, vector<string> >::const_iterator iterSearch;
-	iterSearch = stringMap.find(userInput); 
+	iterSearch = stringMap.find(sortedInput); 
 
-	//Does it exist? Yes - Output, No - Say no to if
+	//Does key exist
+	/*
 	if(iterSearch == stringMap.end()){
 		cout << "There is no word found";
 	}else{
@@ -129,6 +138,7 @@ int main(){
 			cout << tempVec[i] << ", ";
 		}
 	}
+	*/
 
 	return 0;
 } 
