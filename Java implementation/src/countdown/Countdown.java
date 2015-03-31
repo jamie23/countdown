@@ -16,11 +16,8 @@ public class Countdown {
 		String word = dictionary.getSortedInput();
 		
 		for(int i = 4;i<=9;i++){
-
-			k
             int[] positions = initialiseArray(i);
             dictionary.findWord(positions,word);
-            l	 
 		}
 	}
 }
